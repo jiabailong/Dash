@@ -12,6 +12,8 @@ public class MainActivity extends Activity {
         view=(GameView) findViewById(R.id.view);
         view.setMaxValue(180);
         view.setMinValue(0);
+        view.setStartRadian(160);
+        view.setEndRadian(380);
         view.setValue(50);
     }
 }

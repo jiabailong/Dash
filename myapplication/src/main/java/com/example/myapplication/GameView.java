@@ -20,6 +20,8 @@ public class GameView extends View {
 	int angle=0;
 	Context context;
 	int c_angle1;
+	int start_radian=180;
+	int end_radian=360;
 	public GameView(Context context) {
 		super(context);
 		this.context=context;
@@ -86,69 +88,78 @@ public class GameView extends View {
 		Log.i("jbl", a + "=========c_angle1");
 		
 	}
+	/**
+	 * 范围0和正数
+	 * */
+	public void setStartRadian(int radian) {
+		this.start_radian = radian;
+	}
+	/**
+	 * 范围0和正数
+	 * */
+	public void setEndRadian(int radian) {
+		this.end_radian = radian;
+	}
 
 	@Override
 	public void draw(Canvas canvas) {
 		super.draw(canvas);
+		canvas.translate(0,-70);
 		Paint paint = new Paint();
-//		paint.setColor(Color.BLACK);
 		paint.setAntiAlias(true);
 		paint.setDither(true);
 		int h=this.getMeasuredHeight();
 		int w=this.getMeasuredWidth();
 		int pl=this.getPaddingLeft();
-//		canvas.drawColor(Color.WHITE);
-//		int pt=this.getPaddingTop(); 
-//		canvas.setBitmap(bmap);
-//		canvas.drawBitmap(bmap, 0, 0, paint);
 		paint.setColor(Color.WHITE);
-//		int x0 = 300, y0 = 300, r = 250;
 		int x0 = w/2-20, y0 = h-40, r = w/2-120;
 		int cx0 = x0 + 40, cy0 = y0, r2 = r - 20;
 		int cx1=x0+23;
 		int cy1=y0;
 		paint.setStyle(Paint.Style.STROKE);
-		double pingjun = (maxvalue - minvalue) / 9;
+		double pingjun = (maxvalue - minvalue) / ((end_radian-start_radian)/20);
 		Log.i("jbl", maxvalue + "=========max");
 		paint.setTextSize(28);
-		for (int i = 0; i <= 180; i += 20) {
-
-			int x1 = (int) (x0 + (r+30) * Math.cos((180 - i) * -Math.PI / 180));
-			int y1 = (int) (y0 + (r +20)* Math.sin((180 - i) * -Math.PI / 180));
-			if (i == 0) {
-				canvas.drawText(minvalue + "", x1, y1, paint);
-			} else if (i == 180) {
-				canvas.drawText(maxvalue + "", x1, y1, paint);
-			} else {
-				canvas.drawText((int)(i/20*pingjun) + "", x1, y1,
+		int count=-1;
+		for (int i = start_radian; i <= end_radian; i += 20) {
+			count++;
+			int x1 = (int) (x0 + (r+30) * Math.cos((-i) * -Math.PI / 180));
+			int y1 = (int) (y0 + (r +20)* Math.sin((-i) * -Math.PI / 180));
+//			if (i == 0) {
+//				canvas.drawText(minvalue + "", x1, y1, paint);
+//			} else if (i == 180) {
+//				canvas.drawText(maxvalue + "", x1, y1, paint);
+//			} else {
+				canvas.drawText((int)(count*pingjun) + "", x1, y1,
 						paint);
-			}
+//			}
 
 		}
+		int dis_move=(end_radian-start_radian)/3;
 		paint.setStrokeWidth(15);
 //		paint.setColor(Color.argb(100, 1,204,0));//绿
 		paint.setColor(Color.GREEN);//绿
 		canvas.drawArc(new RectF(x0 - r + 25, y0 - r + 10, x0 + r +20, y0 + r),
-				180, 60, false, paint);
+				start_radian,dis_move, false, paint);
 		Log.i("jbl", c_angle1 + "=========c_angle1");
 //		paint.setColor(Color.argb(100, 255,234,1));//黄
 		paint.setColor(Color.YELLOW);//黄
 		canvas.drawArc(new RectF(x0 - r + 25, y0 - r + 10, x0 + r + 20, y0 + r),
-				240, 60, false, paint);
+				start_radian+dis_move, dis_move, false, paint);
 //		paint.setColor(Color.argb(100, 254,0,0));//红
 		paint.setColor(Color.RED);//红
 		canvas.drawArc(new RectF(x0 - r + 25, y0 - r + 10, x0 + r + 20, y0 + r),
-				300, 60, false, paint);
+				start_radian+dis_move*2, dis_move, false, paint);
 		paint.setStrokeWidth(5);
-		for (int i = 0; i <= 180; i += 20) {
+		for (int i = start_radian; i <= end_radian; i += 20) {
 			int x1 = (int) (cx1+ + (r2+5 )
-					* Math.cos((180 - i) * -Math.PI / 180));
+					* Math.cos((-i) * -Math.PI / 180));
 			int y1 = (int) (cy1 + (r2+5 )
-					* Math.sin((180 - i) * -Math.PI / 180));
+					* Math.sin(( -i) * -Math.PI / 180));
 			int x2 = (int) (cx1+ (r2 - 10)
-					* Math.cos((180 - i) * -Math.PI / 180));
+					* Math.cos((- i) * -Math.PI / 180));
 			int y2 = (int) (cy1 + (r2 - 10)
-					* Math.sin((180 - i) * -Math.PI / 180));
+					* Math.sin((- i) * -Math.PI / 180));
 			canvas.drawLine(x1, y1, x2, y2, paint);
 		}
 
@@ -156,21 +167,21 @@ public class GameView extends View {
 		int y3 = (int) (cy0 + (r2 - 20) * Math.sin((180 - angle) * -Math.PI / 180));
 		 canvas.drawLine(cx0, cy0,x3 , y3, paint);//ָ��
 		canvas.drawCircle(cx0,cy0,5,paint);
-//		BitmapDrawable bd = (BitmapDrawable) (getResources()
-//				.getDrawable(R.drawable.signsec_pointer_01));
-//		Bitmap bm = bd.getBitmap();
-		canvas.save();
-		canvas.rotate(angle, cx0-25, cy0 + 2);
-//		canvas.drawBitmap(bm, cx0 - bm.getWidth() +1 , cy0 - bm.getHeight()
-//				/ 2, paint);
 
-		canvas.restore();
-		// canvas.drawBitmap(bm, matrix, paint);
 
-		Log.d("jia", "draw========ִ��");
-		Log.d("jia", angle+"========ִ��");
+
 		
 	}
+//	public void drawPoint(Canvas canvas){
+//				BitmapDrawable bd = (BitmapDrawable) (getResources()
+//				.getDrawable(R.drawable.signsec_pointer_01));
+//		Bitmap bm = bd.getBitmap();
+//		canvas.save();
+//		canvas.rotate(angle, cx0-25, cy0 + 2);
+//		canvas.restore();
+//		canvas.translate(0,-70);
+//		 canvas.drawBitmap(bm, matrix, paint);
+//	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
