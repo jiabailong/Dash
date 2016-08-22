@@ -1,12 +1,10 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -20,24 +18,27 @@ public class GameView extends View {
 	int angle=0;
 	Context context;
 	int c_angle1;
-	int start_radian=180;
-	int end_radian=360;
+	int start_radian=0;
+	int end_radian=180;
 	public GameView(Context context) {
 		super(context);
 		this.context=context;
 		// TODO Auto-generated constructor stub
+	//	new PointThread().start();
 	}
 
 	public GameView(Context context, AttributeSet attrs) {
 		super(context,attrs);
 		this.context=context;
 		// TODO Auto-generated constructor stub
+		//new PointThread().start();
 	}
 
 	public GameView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		this.context=context;
 		// TODO Auto-generated constructor stub
+//		new PointThread().start();
 	}
 
 	Handler handler2 = new Handler() {
@@ -45,16 +46,16 @@ public class GameView extends View {
 		@Override
 		public void handleMessage(Message msg) {
 			if(value==minvalue){
-				angle=0;
+				angle=start_radian;
 			}else if(value==maxvalue){
-				angle=180;
+				angle=end_radian;
 			}else{
 				Log.i("jia", (double)((double)50/(double)100)+"=======");
 				double m=(double)value/(double)maxvalue;
 				angle=(int)(m*180);
 				Log.i("jbl", angle+"========angle");
 			}
-			
+
 			invalidate();
 			super.handleMessage(msg);
 		}
@@ -63,6 +64,7 @@ public class GameView extends View {
 
 	public void setValue(int value) {
 		this.value = value;
+		this.angle=value;
 		handler2.sendEmptyMessage(0);
 	}
 
@@ -189,28 +191,30 @@ public class GameView extends View {
 		// TODO Auto-generated method stub
 		super.onDraw(canvas);
 	}
-
-	class PointThread implements Runnable {
-
-		@Override
-		public void run() {
+//int i;
+//	class PointThread extends Thread {
+//
+//		@Override
+//		public void run() {
 //			while (true) {
-////				i += 20;
-////				if (i >= 180) {
-////					i = 0;
-////				}
+//				i += 20;
+//				if (i >= 180) {
+//					i = 0;
+//				}
 //				try {
-//					Thread.sleep(1000);
+//					Thread.sleep(2000);
 //				} catch (InterruptedException e) {
 //					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}
+//				GameView.this.value=i;
 //				handler2.sendEmptyMessage(0);
+//				Log.d("jia","==="+GameView.this.value);
 ////
 //			}
 //
-		}
-
-	}
+//		}
+//
+//	}
 
 }
